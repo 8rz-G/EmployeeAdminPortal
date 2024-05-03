@@ -28,9 +28,16 @@ namespace EmployeeAdminPortal.Controllers
 
 		[HttpGet]
 		[Route("{id:guid}")]
-		public IActionResult GetEmployeesById(Guid id) 
+		public IActionResult GetEmployeesById(Guid id)
 		{
-			dbContext.Employees.Find(id);
+			var employee = dbContext.Employees.Find(id);
+
+			if (employee == null) 
+			{
+				return NotFound("Employee not found!");
+			}
+
+			return Ok(employee);
 		}
 
 		[HttpPost]
@@ -49,6 +56,26 @@ namespace EmployeeAdminPortal.Controllers
 			dbContext.SaveChanges();
 
 			return Ok(employeeEntity);
+		}
+
+		[HttpPut]
+		[Route("{id:guid}")]
+		public IActionResult UpdateEmployee(Guid id, UpdateEmployeeDto updateEmployeeDto)
+		{
+			var employee = dbContext.Employees.Find(id);
+			if (employee == null) 
+			{
+				return NotFound("Employee not found!");
+			}
+
+			employee.Name = updateEmployeeDto.Name;
+			employee.Email = updateEmployeeDto.Email;
+			employee.Phone = updateEmployeeDto.Phone;
+			employee.Salary = updateEmployeeDto.Salary;
+			
+			dbContext.SaveChanges();
+
+			return Ok(employee);
 		}
 	}
 }
