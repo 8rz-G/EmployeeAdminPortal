@@ -25,6 +25,14 @@ namespace EmployeeAdminPortal.Controllers
 			
 			return Ok(allEmployees);
 		}
+
+		[HttpGet]
+		[Route("{id:guid}")]
+		public IActionResult GetEmployeesById(Guid id) 
+		{
+			dbContext.Employees.Find(id);
+		}
+
 		[HttpPost]
 		public IActionResult AddEmployee(AddEmployeeDto addEmployeeDto)
 		{ 
